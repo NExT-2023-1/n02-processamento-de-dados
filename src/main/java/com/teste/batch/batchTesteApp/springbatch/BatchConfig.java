@@ -14,27 +14,38 @@ import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilde
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
+import org.springframework.batch.item.file.mapping.DefaultLineMapper;
+import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.PathResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 public class BatchConfig {
 
-    @Bean
-    public FlatFileItemReader<Paciente> reader() {
-        return new FlatFileItemReaderBuilder<Paciente>()
-        .name( "PacienteItemReader"  )
-        .resource( new PathResource("C:/Users/Halley Pai/Desktop/New/Nova pasta/batchTesteApp/src/main/resources/Paciente.CSV") )
-        .delimited()
-        .names( "id", "nome", "cpf", "idade", "fone", "email" )
-        .fieldSetMapper( new BeanWrapperFieldSetMapper<Paciente>() {{
-            setTargetType( Paciente.class );
-        }})
-        .build();
-    }
+@Bean
+public FlatFileItemReader<Paciente> reader() {
+    FlatFileItemReader<Paciente> reader = new FlatFileItemReader<>();
+    reader.setResource(new ClassPathResource("Paciente.csv")); // Substitua pelo caminho correto do seu arquivo CSV
+    reader.setLinesToSkip(1); // Pule a primeira linha (cabeçalho)
+
+    DefaultLineMapper<Paciente> lineMapper = new DefaultLineMapper<>();
+
+    DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
+    tokenizer.setNames("id", "nome", "cpf", "idade", "fone", "email");
+
+    lineMapper.setLineTokenizer(tokenizer);
+    lineMapper.setFieldSetMapper(new BeanWrapperFieldSetMapper<Paciente>() {{
+        setTargetType(Paciente.class);
+    }});
+
+    reader.setLineMapper(lineMapper);
+
+    return reader;
+}
 
     @Bean
     public PacienteItemProcessor processor() {

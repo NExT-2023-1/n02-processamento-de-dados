@@ -14,13 +14,14 @@ public class PacienteItemProcessor implements ItemProcessor<Paciente, Paciente> 
 
     @Override
     public Paciente process(final @NonNull Paciente paciente) throws Exception {
+        final Long id = paciente.getId();
         final String nome = paciente.getNome().toUpperCase();
         final String cpf = paciente.getCpf();
         final int idade=paciente.getIdade();
         final String fone=paciente.getFone();
         final String email=paciente.getEmail();
 
-        final Paciente novoPaciente = new Paciente((long)Math.random(), nome, cpf, idade, fone, email);
+        final Paciente novoPaciente = new Paciente(id, nome, cpf, idade, fone, email);
 
         log.info(   "Converting (" + novoPaciente+")into("+ novoPaciente +    ")");
 

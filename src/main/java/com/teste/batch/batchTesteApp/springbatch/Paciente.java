@@ -1,15 +1,16 @@
 package com.teste.batch.batchTesteApp.springbatch;
 
-import jakarta.persistence.Entity;
+
 import jakarta.persistence.Id;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
+
 import lombok.Data;
 //import lombok.ToString;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@Entity
-//@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Paciente {
     
     @Id
@@ -20,12 +21,6 @@ public class Paciente {
     private String fone;
     private String email;
     
-    public Paciente(Long id, String nome, String cpf, int idade, String fone, String email) {
-        this.id = id;
-        this.nome = nome;
-        this.cpf = cpf;
-        this.idade = idade;
-        this.fone = fone;
-        this.email = email;
-    }
+    
+
 }
